@@ -1,0 +1,129 @@
+﻿namespace AAMigrate
+{
+    partial class RibbonMigrate : Microsoft.Office.Tools.Ribbon.RibbonBase
+    {
+        /// <summary>
+        /// Variable nécessaire au concepteur.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        public RibbonMigrate()
+            : base(Globals.Factory.GetRibbonFactory())
+        {
+            InitializeComponent();
+        }
+
+        /// <summary> 
+        /// Nettoyage des ressources utilisées.
+        /// </summary>
+        /// <param name="disposing">true si les ressources managées doivent être supprimées ; sinon, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Code généré par le Concepteur de composants
+
+        /// <summary>
+        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
+        /// le contenu de cette méthode avec l'éditeur de code.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.tab1 = this.Factory.CreateRibbonTab();
+            this.aaGroup = this.Factory.CreateRibbonGroup();
+            this.GenerateFileButton = this.Factory.CreateRibbonButton();
+            this.OrderColumnButton = this.Factory.CreateRibbonButton();
+            this.ExportsButton = this.Factory.CreateRibbonButton();
+            this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
+            this.tab1.SuspendLayout();
+            this.aaGroup.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // tab1
+            // 
+            this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
+            this.tab1.Groups.Add(this.aaGroup);
+            this.tab1.Label = "Everdyn";
+            this.tab1.Name = "tab1";
+            // 
+            // aaGroup
+            // 
+            this.aaGroup.Items.Add(this.OrderColumnButton);
+            this.aaGroup.Items.Add(this.ExportsButton);
+            this.aaGroup.Items.Add(this.GenerateFileButton);
+            this.aaGroup.Items.Add(this.ClearStyleSheetButton);
+            this.aaGroup.Label = "ArchestrA";
+            this.aaGroup.Name = "aaGroup";
+            // 
+            // GenerateFileButton
+            // 
+            this.GenerateFileButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.GenerateFileButton.Label = "Génération";
+            this.GenerateFileButton.Name = "GenerateFileButton";
+            this.GenerateFileButton.OfficeImageId = "GetPowerQueryDataFromCsv";
+            this.GenerateFileButton.ShowImage = true;
+            this.GenerateFileButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.GenerateFileButton_Click);
+            // 
+            // OrderColumnButton
+            // 
+            this.OrderColumnButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.OrderColumnButton.Label = "Transfert attributs";
+            this.OrderColumnButton.Name = "OrderColumnButton";
+            this.OrderColumnButton.OfficeImageId = "PasteTranspose";
+            this.OrderColumnButton.ShowImage = true;
+            this.OrderColumnButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.OrderColumnButton_Click);
+            // 
+            // ExportsButton
+            // 
+            this.ExportsButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.ExportsButton.Label = "Vers exports";
+            this.ExportsButton.Name = "ExportsButton";
+            this.ExportsButton.OfficeImageId = "TableExportMenu";
+            this.ExportsButton.ShowImage = true;
+            this.ExportsButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ExportsButton_Click);
+            // 
+            // ClearStyleSheetButton
+            // 
+            this.ClearStyleSheetButton.Label = "Nettoyage styles";
+            this.ClearStyleSheetButton.Name = "ClearStyleSheetButton";
+            this.ClearStyleSheetButton.OfficeImageId = "ClearFormats";
+            this.ClearStyleSheetButton.ShowImage = true;
+            this.ClearStyleSheetButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ClearStyleSheetButton_Click);
+            // 
+            // RibbonMigrate
+            // 
+            this.Name = "RibbonMigrate";
+            this.RibbonType = "Microsoft.Excel.Workbook";
+            this.Tabs.Add(this.tab1);
+            this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.RibbonMigrate_Load);
+            this.tab1.ResumeLayout(false);
+            this.tab1.PerformLayout();
+            this.aaGroup.ResumeLayout(false);
+            this.aaGroup.PerformLayout();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup aaGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton GenerateFileButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton OrderColumnButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton ClearStyleSheetButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton ExportsButton;
+    }
+
+    partial class ThisRibbonCollection
+    {
+        internal RibbonMigrate RibbonMigrate
+        {
+            get { return this.GetRibbon<RibbonMigrate>(); }
+        }
+    }
+}
