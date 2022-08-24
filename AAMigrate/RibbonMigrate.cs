@@ -85,10 +85,21 @@ namespace AAMigrate
 
             Excel.Workbook OriginalBook = null;
 
-            SelectBook selectBook = new SelectBook(workBookNames);
-            if (selectBook.ShowDialog() == DialogResult.OK && selectBook.BookSelected != null)
+            if(workBookNames.Count >= 1)
             {
-                OriginalBook = Globals.ThisAddIn.Application.Workbooks[selectBook.BookSelected];
+                SelectBook selectBook = new SelectBook(workBookNames);
+                if (selectBook.ShowDialog() == DialogResult.OK && selectBook.BookSelected != null)
+                {
+                    OriginalBook = Globals.ThisAddIn.Application.Workbooks[selectBook.BookSelected];
+                }
+            }
+            else if(workBookNames.Count == 1)
+            {
+                OriginalBook = Globals.ThisAddIn.Application.Workbooks[workBookNames.First()];
+            }
+            else
+            {
+                OriginalBook = null;
             }
 
             Excel.Worksheet bruteWorksheet = null, templateWorksheet = null;
@@ -304,10 +315,17 @@ namespace AAMigrate
                         tagname += (tagnameChars[c] == '*') ? masterTagname[c] : tagnameChars[c];
                     }
                 }
-
-                if (bruteWorksheet.Range["A:A"].Find(tagname) is Excel.Range tagnameCell && tagnameCell != null && LineIsFree(tagnameCell))
+                
+                if (bruteWorksheet.Range["A:A"].Find(tagname, LookAt: XlLookAt.xlWhole) is Excel.Range tagnameCell && tagnameCell != null && LineIsFree(tagnameCell))
                 {
-                    oldTagnameRow.Add(maskTagname.Name, new OldTagnameSheet { Tagname = tagname, Row = tagnameCell.Row });
+                    if(!oldTagnameRow.ContainsKey(maskTagname.Name))
+                    {
+                        oldTagnameRow.Add(maskTagname.Name, new OldTagnameSheet { Tagname = tagname, Row = tagnameCell.Row });
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Le filtre {maskTagname.Name} est en double", "Erreur de filtrage", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
 
@@ -348,6 +366,14 @@ namespace AAMigrate
                 MessageBox.Show("Aucun jeu d'attribut trouvé");
                 return;
             }
+
+            var duplicateKeys = attributNameMasks.GroupBy(x => x.Name).Where(group => group.Count() > 1).Select(group => group.Key);
+            if(duplicateKeys.Any())
+            {
+                MessageBox.Show($"Filtre en double : {duplicateKeys.Aggregate((concat, str) => concat + ", " + str)}", "Filtre en double", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
 
             LineAlreadyMigred(bruteWorksheet);                          // Marque les lignes déjà traité par un autre modèle
 
