@@ -260,10 +260,11 @@ namespace AAMigrate
         private List<TagnameSheet> GetMaskTagname(Excel.Worksheet templateWorksheet)
         {
             List<TagnameSheet> tagnameSheets = new List<TagnameSheet>();
-
+            List<string> commentString = new List<string>() { "//", "/*", "(*", "'" };
             for (int i = 1; i < templateWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Column; i++)
             {
-                if (templateWorksheet.Range[$"{GetExcelColumnName(i)}1"].Value is string attributeName && !string.IsNullOrEmpty(attributeName))
+                if (templateWorksheet.Range[$"{GetExcelColumnName(i)}1"].Value is string attributeName && !string.IsNullOrEmpty(attributeName) &&
+                    !commentString.Any(comment => attributeName.StartsWith(comment)))
                 {
                     tagnameSheets.Add(new TagnameSheet(attributeName, i));
                 }
@@ -304,7 +305,7 @@ namespace AAMigrate
                 string tagname = string.Empty;
                 if (!maskTagname.Name.Contains('*'))
                 {
-                    tagname = maskTagname.Name + firstTagnameRow.Substring(4);
+                    tagname = maskTagname.Name + firstTagnameRow.Substring(maskTagname.Name.Length);
                 }
                 else
                 {
@@ -381,7 +382,8 @@ namespace AAMigrate
             int endRowBruteSheet = bruteWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row;
             for(int iBruteRow = 1; iBruteRow < endRowBruteSheet; iBruteRow++)
             {
-                if (LineIsFree(bruteWorksheet.Range[$"A{iBruteRow}"]) && bruteWorksheet.Range[$"A{iBruteRow}"].Value is string firstTagname && firstTagname.ToUpper().StartsWith(attributNameMasks[0].Name))
+                if (LineIsFree(bruteWorksheet.Range[$"A{iBruteRow}"]) && bruteWorksheet.Range[$"A{iBruteRow}"].Value is string firstTagname &&
+                    (firstTagname.ToUpper().StartsWith(attributNameMasks[0].Name) || (!string.IsNullOrEmpty(attributNameMasks[0].StartingName) && firstTagname.ToUpper().StartsWith(attributNameMasks[0].StartingName))))
                 {
                     Dictionary<string, OldTagnameSheet> oldTagnames = GetOldTagname(bruteWorksheet, attributNameMasks, firstTagname);
 
@@ -418,6 +420,7 @@ namespace AAMigrate
                                     }
                                     else
                                     {
+                                        templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].ClearComments();
                                         templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].AddComment($"Source : {bruteWorksheet.Name}!{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}");
                                     }
 
@@ -451,7 +454,7 @@ namespace AAMigrate
 
             foreach (Excel.Worksheet sheet in Globals.ThisAddIn.Application.Sheets)
             {
-                if(sheet.Name.StartsWith("$ST_"))
+                if(sheet.Name.StartsWith("$ST_") && lastRowTemplate > 3)
                 {
                     sheet.Range["3:3"].AutoFill(sheet.Range[$"3:{lastRowTemplate}"]);
                 }
