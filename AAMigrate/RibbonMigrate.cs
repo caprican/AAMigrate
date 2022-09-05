@@ -381,7 +381,8 @@ namespace AAMigrate
                 int lastRowTemplate = templateWorksheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
                 if (sheet.Name.StartsWith("$ST_") && lastRowTemplate > 3)
                 {
-                    sheet.Range["3:3"].AutoFill(sheet.Range[$"3:{lastRowTemplate}"]);
+                    try { sheet.Range["3:3"].AutoFill(sheet.Range[$"3:{lastRowTemplate}"]); }
+                    catch { }
                 }
             }
         }
@@ -419,72 +420,87 @@ namespace AAMigrate
                     if (attributNameMasks.Count != oldTagnames.Count)
                     {
                         var windows = new DiffOldTagnamesAttributesForm(attributNameMasks.Select(attribute => attribute.Name).ToList(), oldTagnames.Select(tag => tag.Value.Tagname).ToList());
-                        if(windows.ShowDialog() != DialogResult.Ignore)
+                        switch(windows.ShowDialog())
                         {
-                            AutoFill(templateWorksheet);
-                            return;
+                            case DialogResult.Ignore:
+                                break;
+                            case DialogResult.OK:
+                                FindAndCopyAttribute(bruteWorksheet, templateWorksheet, dataBook, attributNameMasks, oldTagnames, rowTemplate);
+                                rowTemplate++;
+                                break;
+                            case DialogResult.Abort:
+                                AutoFill(templateWorksheet);
+                                return;
                         }
                     }
-
-                    foreach (TagnameSheet attributNameMask in attributNameMasks)
+                    else
                     {
-                        for (int iColumn = attributNameMask.ColumnStart; iColumn <= attributNameMask.ColumnEnd; iColumn++)
-                        {
-                            if(oldTagnames.ContainsKey(attributNameMask.Name))
-                            {
-                                int oldTagnameRow = GetRowOldAttribut(bruteWorksheet, oldTagnames[attributNameMask.Name].Row - 1);
-
-                                if (oldTagnameRow < 0)
-                                {
-                                    MessageBox.Show("Problème");
-                                    return;
-                                }
-
-                                string attributeName = templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}2"].Value;
-                                if (bruteWorksheet.Range[$"{oldTagnameRow}:{oldTagnameRow}"].Find(attributeName) is Excel.Range BruteAttribute && BruteAttribute != null &&
-                                    LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
-                                {
-                                    int iBruteColumn = BruteAttribute.Column;
-
-                                    if (!(bruteWorksheet.Range[$"{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}"].Value is null))
-                                    {
-                                        templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].Value = $"={bruteWorksheet.Name}!{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}";
-                                    }
-                                    else
-                                    {
-                                        templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].ClearComments();
-                                        templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].AddComment($"Source : {bruteWorksheet.Name}!{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}");
-                                    }
-
-                                    UpperCell(bruteWorksheet, iBruteColumn, oldTagnames[attributNameMask.Name].Row);
-
-                                    if (!(dataBook is null))
-                                    {
-                                        UpperCell(dataBook.ActiveSheet, iBruteColumn, oldTagnames[attributNameMask.Name].Row);
-                                    }
-                                }
-                            }
-                        }
-                        if(oldTagnames.ContainsKey(attributNameMask.Name))
-                        {
-                            if (LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
-                            {
-                                bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-
-                                if(!(dataBook is null))
-                                {
-                                    dataBook.ActiveSheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-                                }
-                            }
-                        }
+                        FindAndCopyAttribute(bruteWorksheet, templateWorksheet, dataBook, attributNameMasks, oldTagnames, rowTemplate);
+                        rowTemplate++;
                     }
-                    rowTemplate++;
                 }
             }
 
             AutoFill(templateWorksheet);
 
             MessageBox.Show("Transfert des colonnes en fonction des template terminé", "Transfert terminé", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void FindAndCopyAttribute(Excel.Worksheet bruteWorksheet, Excel.Worksheet templateWorksheet, Excel.Workbook dataBook, 
+            List<TagnameSheet> attributNameMasks, Dictionary<string, OldTagnameSheet> oldTagnames, int rowTemplate)
+        {
+            foreach (TagnameSheet attributNameMask in attributNameMasks)
+            {
+                for (int iColumn = attributNameMask.ColumnStart; iColumn <= attributNameMask.ColumnEnd; iColumn++)
+                {
+                    if (oldTagnames.ContainsKey(attributNameMask.Name))
+                    {
+                        int oldTagnameRow = GetRowOldAttribut(bruteWorksheet, oldTagnames[attributNameMask.Name].Row - 1);
+
+                        if (oldTagnameRow < 0)
+                        {
+                            MessageBox.Show("Problème");
+                            return;
+                        }
+
+                        string attributeName = templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}2"].Value;
+                        if (bruteWorksheet.Range[$"{oldTagnameRow}:{oldTagnameRow}"].Find(attributeName) is Excel.Range BruteAttribute && BruteAttribute != null &&
+                            LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
+                        {
+                            int iBruteColumn = BruteAttribute.Column;
+
+                            if (!(bruteWorksheet.Range[$"{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}"].Value is null))
+                            {
+                                templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].Value = $"={bruteWorksheet.Name}!{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}";
+                            }
+                            else
+                            {
+                                templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].ClearComments();
+                                templateWorksheet.Range[$"{GetExcelColumnName(iColumn)}{rowTemplate}"].AddComment($"Source : {bruteWorksheet.Name}!{GetExcelColumnName(iBruteColumn)}{oldTagnames[attributNameMask.Name].Row}");
+                            }
+
+                            UpperCell(bruteWorksheet, iBruteColumn, oldTagnames[attributNameMask.Name].Row);
+
+                            if (!(dataBook is null))
+                            {
+                                UpperCell(dataBook.ActiveSheet, iBruteColumn, oldTagnames[attributNameMask.Name].Row);
+                            }
+                        }
+                    }
+                }
+                if (oldTagnames.ContainsKey(attributNameMask.Name))
+                {
+                    if (LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
+                    {
+                        bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
+
+                        if (!(dataBook is null))
+                        {
+                            dataBook.ActiveSheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
+                        }
+                    }
+                }
+            }
         }
 
         private void ClearStyleSheetButton_Click(object sender, RibbonControlEventArgs e)
@@ -549,9 +565,7 @@ namespace AAMigrate
             int row = Globals.ThisAddIn.Application.ActiveCell.Row;
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            displayWorksheet.Range[$"{row}:{row}"].Interior.Color = System.Drawing.Color.Transparent;
-            displayWorksheet.Range[$"{row}:{row}"].Font.Color = Color.Black;
-            displayWorksheet.Range[$"{row}:{row}"].Font.Strikethrough = false;
+            displayWorksheet.Range[$"{row}:{row}"].Style = "Normal";
         }
     }
 }

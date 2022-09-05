@@ -36,6 +36,7 @@
             // bClose
             // 
             this.bClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bClose.Location = new System.Drawing.Point(936, 719);
             this.bClose.Name = "bClose";
             this.bClose.Size = new System.Drawing.Size(195, 67);
@@ -73,6 +74,7 @@
             this.Controls.Add(this.bClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "AttributesNoCopy";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Attributs non copiés";
             this.ResumeLayout(false);
             this.PerformLayout();

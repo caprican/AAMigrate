@@ -93,6 +93,7 @@
             this.Name = "SelectBook";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Sélection source de données";
             this.ResumeLayout(false);
             this.PerformLayout();

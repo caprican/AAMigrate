@@ -39,9 +39,9 @@
             this.OrderColumnButton = this.Factory.CreateRibbonButton();
             this.ExportsButton = this.Factory.CreateRibbonButton();
             this.GenerateFileButton = this.Factory.CreateRibbonButton();
-            this.UnmarkRowButton = this.Factory.CreateRibbonButton();
-            this.DoNotMigrateButton = this.Factory.CreateRibbonButton();
             this.menu1 = this.Factory.CreateRibbonMenu();
+            this.DoNotMigrateButton = this.Factory.CreateRibbonButton();
+            this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
@@ -90,13 +90,13 @@
             this.GenerateFileButton.ShowImage = true;
             this.GenerateFileButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.GenerateFileButton_Click);
             // 
-            // UnmarkRowButton
+            // menu1
             // 
-            this.UnmarkRowButton.Label = "Démarquer la ligne";
-            this.UnmarkRowButton.Name = "UnmarkRowButton";
-            this.UnmarkRowButton.OfficeImageId = "ClearFormats";
-            this.UnmarkRowButton.ShowImage = true;
-            this.UnmarkRowButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UnmarkRowButton_Click);
+            this.menu1.Items.Add(this.DoNotMigrateButton);
+            this.menu1.Items.Add(this.UnmarkRowButton);
+            this.menu1.Items.Add(this.ClearStyleSheetButton);
+            this.menu1.Label = "Marquage ligne";
+            this.menu1.Name = "menu1";
             // 
             // DoNotMigrateButton
             // 
@@ -106,13 +106,13 @@
             this.DoNotMigrateButton.ShowImage = true;
             this.DoNotMigrateButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DoNotMigrateButton_Click);
             // 
-            // menu1
+            // UnmarkRowButton
             // 
-            this.menu1.Items.Add(this.DoNotMigrateButton);
-            this.menu1.Items.Add(this.UnmarkRowButton);
-            this.menu1.Items.Add(this.ClearStyleSheetButton);
-            this.menu1.Label = "Marquage ligne";
-            this.menu1.Name = "menu1";
+            this.UnmarkRowButton.Label = "Démarquer la ligne";
+            this.UnmarkRowButton.Name = "UnmarkRowButton";
+            this.UnmarkRowButton.OfficeImageId = "ClearFormats";
+            this.UnmarkRowButton.ShowImage = true;
+            this.UnmarkRowButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UnmarkRowButton_Click);
             // 
             // ClearStyleSheetButton
             // 

@@ -35,6 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AttributesBox
@@ -58,12 +59,12 @@
             // bClose
             // 
             this.bClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.bClose.DialogResult = System.Windows.Forms.DialogResult.Abort;
             this.bClose.Location = new System.Drawing.Point(12, 766);
             this.bClose.Name = "bClose";
             this.bClose.Size = new System.Drawing.Size(195, 67);
             this.bClose.TabIndex = 2;
-            this.bClose.Text = "Fermer et annuler";
+            this.bClose.Text = "Abandonner";
             this.bClose.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -96,7 +97,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Ignore;
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.Location = new System.Drawing.Point(945, 766);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(195, 67);
@@ -104,11 +105,23 @@
             this.button1.Text = "Migrer";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Ignore;
+            this.button2.Location = new System.Drawing.Point(472, 766);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(195, 67);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Suivant";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // DiffOldTagnamesAttributesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1152, 845);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -117,6 +130,7 @@
             this.Controls.Add(this.OldTagnameBox);
             this.Controls.Add(this.AttributesBox);
             this.Name = "DiffOldTagnamesAttributesForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DiffOldTagnamesAttributesForm";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -132,5 +146,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
