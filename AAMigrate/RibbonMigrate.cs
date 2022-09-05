@@ -85,7 +85,7 @@ namespace AAMigrate
 
             Excel.Workbook OriginalBook = null;
 
-            if(workBookNames.Count >= 1)
+            if(workBookNames.Count > 1)
             {
                 SelectBook selectBook = new SelectBook(workBookNames);
                 if (selectBook.ShowDialog() == DialogResult.OK && selectBook.BookSelected != null)
@@ -95,7 +95,7 @@ namespace AAMigrate
             }
             else if(workBookNames.Count == 1)
             {
-                OriginalBook = Globals.ThisAddIn.Application.Workbooks[workBookNames.First()];
+                OriginalBook = Globals.ThisAddIn.Application.Workbooks[workBookNames[0]];
             }
             else
             {
@@ -285,7 +285,8 @@ namespace AAMigrate
                 {
                     string attribut = templateWorksheet.Range[$"{GetExcelColumnName(j)}2"].Value as string;
 
-                    attributName.Add(attribut.Contains(".") ? attribut.Split('.').Skip(1).Aggregate((concat, str) => $"{concat}.{str}") : attribut);
+                    if(!attribut.Contains("."))
+                        attributName.Add(attribut);
                 }
 
                 if(attributName.GroupBy(x => x).Where(g => g.Count() > 1).Select(x => x.Key).FirstOrDefault() is string duplicationAttribut)
@@ -316,7 +317,7 @@ namespace AAMigrate
                         tagname += (tagnameChars[c] == '*') ? masterTagname[c] : tagnameChars[c];
                     }
                 }
-                
+
                 if (bruteWorksheet.Range["A:A"].Find(tagname, LookAt: XlLookAt.xlWhole) is Excel.Range tagnameCell && tagnameCell != null && LineIsFree(tagnameCell))
                 {
                     if(!oldTagnameRow.ContainsKey(maskTagname.Name))
@@ -374,7 +375,6 @@ namespace AAMigrate
                 MessageBox.Show($"Filtre en double : {duplicateKeys.Aggregate((concat, str) => concat + ", " + str)}", "Filtre en double", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
 
             LineAlreadyMigred(bruteWorksheet);                          // Marque les lignes déjà traité par un autre modèle
 
