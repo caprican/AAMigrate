@@ -13,6 +13,7 @@ using System.Drawing;
 using Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.Collections;
+using System.Data.Common;
 
 namespace AAMigrate
 {
@@ -25,14 +26,20 @@ namespace AAMigrate
 
         private void GenerateFileButton_Click(object sender, RibbonControlEventArgs e)
         {
+            var fileName = Globals.ThisAddIn.Application.ActiveWorkbook.Name;
+            fileName = fileName.Split('.').Reverse().Skip(1).Reverse().Aggregate((concat, str) => concat += "." + str);
+
             SaveFileDialog fileDialog = new SaveFileDialog
             {
                 Filter = "CSV UTF-8 (délimité par des virgules) (*.csv)|*.csv|All files (*.*)|*.*",
-                RestoreDirectory = true
+                RestoreDirectory = true,
+                FileName = fileName + "_NEW"
             };
 
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
+                Globals.ThisAddIn.Application.ActiveWorkbook.Save();
+
                 string FileSave = fileDialog.FileName;
 
                 //System.Globalization.CultureInfo OriginalLanguage = System.Globalization.CultureInfo.CurrentCulture;
@@ -60,6 +67,7 @@ namespace AAMigrate
                 //// Restauration de la langue d'origine
                 //System.Threading.Thread.CurrentThread.CurrentCulture = OriginalLanguage;
 
+                Globals.ThisAddIn.Application.ActiveWorkbook.SaveAs(fileName, XlFileFormat.xlWorkbookDefault);
             }
         }
 
@@ -210,15 +218,22 @@ namespace AAMigrate
                     {
                         if (LineIsFree(bruteWorksheet.Range[$"{colOrig}{i}"]))
                         {
-                            templateWorksheet.Range[$"{colDest}{rowDest}"].Value = $"={bruteWorksheet.Name}!{colOrig}{i}";
-                            bruteWorksheet.Range[$"{colOrig}{i}"].Font.Bold = true;
-                            bruteWorksheet.Range[$"{colOrig}{i}"].Font.Color = System.Drawing.Color.DarkOrange;
+                            if (!(bruteWorksheet.Range[$"{colOrig}{i}"].Value is null))
+                            {
+                                templateWorksheet.Range[$"{colDest}{rowDest}"].Value = $"={bruteWorksheet.Name}!{colOrig}{i}";
+                            }
+                            else
+                            {
+                                templateWorksheet.Range[$"{colDest}{rowDest}"].ClearComments();
+                                templateWorksheet.Range[$"{colDest}{rowDest}"].AddComment($"Source : {bruteWorksheet.Name}!{colOrig}{i}");
+                            }
+
+                            UpperCell(bruteWorksheet, findAttribute.Column, i);
                             rowDest++;
 
                             if (!(dataBook is null))
                             {
-                                dataBook.ActiveSheet.Range[$"{colOrig}{i}"].Font.Bold = true;
-                                dataBook.ActiveSheet.Range[$"{colOrig}{i}"].Font.Color = System.Drawing.Color.DarkOrange;
+                                UpperCell(dataBook.ActiveSheet, findAttribute.Column, i);
                             }
                         }
                     }
@@ -245,6 +260,8 @@ namespace AAMigrate
                 }
             }
             #endregion
+
+            AutoFill(templateWorksheet);
 
             if (NoCopyAttributes.Count > 0)
             {
@@ -357,6 +374,18 @@ namespace AAMigrate
             worksheet.Range[$"{GetExcelColumnName(column)}{row}"].Font.Color = System.Drawing.Color.DarkOrange;
         }
 
+        private void AutoFill(Excel.Worksheet templateWorksheet)
+        {
+            foreach (Excel.Worksheet sheet in Globals.ThisAddIn.Application.Sheets)
+            {
+                int lastRowTemplate = templateWorksheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
+                if (sheet.Name.StartsWith("$ST_") && lastRowTemplate > 3)
+                {
+                    sheet.Range["3:3"].AutoFill(sheet.Range[$"3:{lastRowTemplate}"]);
+                }
+            }
+        }
+
         private void MergeTemplate(Excel.Workbook dataBook, Excel.Worksheet bruteWorksheet, Excel.Worksheet templateWorksheet)
         {
             DuplicateBruteSheet(dataBook, bruteWorksheet);              // copie les données brute dans la feuille "Brute"
@@ -391,7 +420,10 @@ namespace AAMigrate
                     {
                         var windows = new DiffOldTagnamesAttributesForm(attributNameMasks.Select(attribute => attribute.Name).ToList(), oldTagnames.Select(tag => tag.Value.Tagname).ToList());
                         if(windows.ShowDialog() != DialogResult.Ignore)
+                        {
+                            AutoFill(templateWorksheet);
                             return;
+                        }
                     }
 
                     foreach (TagnameSheet attributNameMask in attributNameMasks)
@@ -450,15 +482,7 @@ namespace AAMigrate
                 }
             }
 
-            int lastRowTemplate = templateWorksheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
-
-            foreach (Excel.Worksheet sheet in Globals.ThisAddIn.Application.Sheets)
-            {
-                if(sheet.Name.StartsWith("$ST_") && lastRowTemplate > 3)
-                {
-                    sheet.Range["3:3"].AutoFill(sheet.Range[$"3:{lastRowTemplate}"]);
-                }
-            }
+            AutoFill(templateWorksheet);
 
             MessageBox.Show("Transfert des colonnes en fonction des template terminé", "Transfert terminé", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -508,6 +532,26 @@ namespace AAMigrate
                 row = exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Row + 2;
             }
 
+        }
+
+        private void DoNotMigrateButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            int row = Globals.ThisAddIn.Application.ActiveCell.Row;
+            Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+
+            displayWorksheet.Range[$"{row}:{row}"].Interior.Color = System.Drawing.Color.Black;
+            displayWorksheet.Range[$"{row}:{row}"].Font.Color = Color.White;
+            displayWorksheet.Range[$"{row}:{row}"].Font.Strikethrough = true;
+        }
+
+        private void UnmarkRowButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            int row = Globals.ThisAddIn.Application.ActiveCell.Row;
+            Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+
+            displayWorksheet.Range[$"{row}:{row}"].Interior.Color = System.Drawing.Color.Transparent;
+            displayWorksheet.Range[$"{row}:{row}"].Font.Color = Color.Black;
+            displayWorksheet.Range[$"{row}:{row}"].Font.Strikethrough = false;
         }
     }
 }
