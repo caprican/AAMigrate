@@ -36,21 +36,24 @@
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.aaGroup = this.Factory.CreateRibbonGroup();
+            this.group1 = this.Factory.CreateRibbonGroup();
             this.OrderColumnButton = this.Factory.CreateRibbonButton();
             this.ExportsButton = this.Factory.CreateRibbonButton();
             this.GenerateFileButton = this.Factory.CreateRibbonButton();
-            this.menu1 = this.Factory.CreateRibbonMenu();
             this.DoNotMigrateButton = this.Factory.CreateRibbonButton();
+            this.ManualMigrationButton = this.Factory.CreateRibbonButton();
             this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
+            this.group1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.aaGroup);
+            this.tab1.Groups.Add(this.group1);
             this.tab1.Label = "Everdyn";
             this.tab1.Name = "tab1";
             // 
@@ -59,9 +62,17 @@
             this.aaGroup.Items.Add(this.OrderColumnButton);
             this.aaGroup.Items.Add(this.ExportsButton);
             this.aaGroup.Items.Add(this.GenerateFileButton);
-            this.aaGroup.Items.Add(this.menu1);
             this.aaGroup.Label = "ArchestrA";
             this.aaGroup.Name = "aaGroup";
+            // 
+            // group1
+            // 
+            this.group1.Items.Add(this.DoNotMigrateButton);
+            this.group1.Items.Add(this.ManualMigrationButton);
+            this.group1.Items.Add(this.UnmarkRowButton);
+            this.group1.Items.Add(this.ClearStyleSheetButton);
+            this.group1.Label = "Marquage ligne";
+            this.group1.Name = "group1";
             // 
             // OrderColumnButton
             // 
@@ -90,27 +101,29 @@
             this.GenerateFileButton.ShowImage = true;
             this.GenerateFileButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.GenerateFileButton_Click);
             // 
-            // menu1
-            // 
-            this.menu1.Items.Add(this.DoNotMigrateButton);
-            this.menu1.Items.Add(this.UnmarkRowButton);
-            this.menu1.Items.Add(this.ClearStyleSheetButton);
-            this.menu1.Label = "Marquage ligne";
-            this.menu1.Name = "menu1";
-            // 
             // DoNotMigrateButton
             // 
-            this.DoNotMigrateButton.Label = "Marquer la ligne";
+            this.DoNotMigrateButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.DoNotMigrateButton.Label = "Non migré";
             this.DoNotMigrateButton.Name = "DoNotMigrateButton";
             this.DoNotMigrateButton.OfficeImageId = "SparkLineNegativePointColorPicker";
             this.DoNotMigrateButton.ShowImage = true;
             this.DoNotMigrateButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DoNotMigrateButton_Click);
             // 
+            // ManualMigrationButton
+            // 
+            this.ManualMigrationButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.ManualMigrationButton.Label = "Manuel";
+            this.ManualMigrationButton.Name = "ManualMigrationButton";
+            this.ManualMigrationButton.OfficeImageId = "SparklineColorPicker";
+            this.ManualMigrationButton.ShowImage = true;
+            this.ManualMigrationButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ManualMigrationButton_Click);
+            // 
             // UnmarkRowButton
             // 
-            this.UnmarkRowButton.Label = "Démarquer la ligne";
+            this.UnmarkRowButton.Label = "Démarquer sélection";
             this.UnmarkRowButton.Name = "UnmarkRowButton";
-            this.UnmarkRowButton.OfficeImageId = "ClearFormats";
+            this.UnmarkRowButton.OfficeImageId = "SparklineClearSelected";
             this.UnmarkRowButton.ShowImage = true;
             this.UnmarkRowButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.UnmarkRowButton_Click);
             // 
@@ -132,6 +145,8 @@
             this.tab1.PerformLayout();
             this.aaGroup.ResumeLayout(false);
             this.aaGroup.PerformLayout();
+            this.group1.ResumeLayout(false);
+            this.group1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -145,8 +160,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton UnmarkRowButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ExportsButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton DoNotMigrateButton;
-        internal Microsoft.Office.Tools.Ribbon.RibbonMenu menu1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ClearStyleSheetButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton ManualMigrationButton;
     }
 
     partial class ThisRibbonCollection

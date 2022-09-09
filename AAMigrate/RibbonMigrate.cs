@@ -27,13 +27,15 @@ namespace AAMigrate
         private void GenerateFileButton_Click(object sender, RibbonControlEventArgs e)
         {
             var fileName = Globals.ThisAddIn.Application.ActiveWorkbook.Name;
+            var filePath = Globals.ThisAddIn.Application.ActiveWorkbook.FullName.Replace(fileName, string.Empty);
             fileName = fileName.Split('.').Reverse().Skip(1).Reverse().Aggregate((concat, str) => concat += "." + str);
 
             SaveFileDialog fileDialog = new SaveFileDialog
             {
                 Filter = "CSV UTF-8 (délimité par des virgules) (*.csv)|*.csv|All files (*.*)|*.*",
                 RestoreDirectory = true,
-                FileName = fileName + "_NEW"
+                FileName = fileName + "_NEW",
+                InitialDirectory = filePath
             };
 
             if (fileDialog.ShowDialog() == DialogResult.OK)
@@ -57,7 +59,7 @@ namespace AAMigrate
                 }
 
                 bool ActiveSheetIsExport = (ActiveWorsheet.Name == "Export");
-                Globals.ThisAddIn.Application.ActiveSheet.SaveAs(FileSave, FileFormat:62/*Excel.XlFileFormat.xlCSVUTF8*/, Local: false);
+                Globals.ThisAddIn.Application.ActiveSheet.SaveAs(FileSave, FileFormat:62/*Excel.XlFileFormat.xlCSVUTF8*/, Local: false, AccessMode: XlSaveAsAccessMode.xlNoChange);
 
                 if (ActiveSheetIsExport || (ActiveWorsheet != Globals.ThisAddIn.Application.ActiveSheet))
                     Globals.ThisAddIn.Application.ActiveSheet.Name = "Export";
@@ -67,7 +69,7 @@ namespace AAMigrate
                 //// Restauration de la langue d'origine
                 //System.Threading.Thread.CurrentThread.CurrentCulture = OriginalLanguage;
 
-                Globals.ThisAddIn.Application.ActiveWorkbook.SaveAs(fileName, XlFileFormat.xlWorkbookDefault);
+                Globals.ThisAddIn.Application.ActiveWorkbook.SaveAs(fileName, XlFileFormat.xlWorkbookDefault, AccessMode: XlSaveAsAccessMode.xlNoChange);
             }
         }
 
@@ -446,7 +448,7 @@ namespace AAMigrate
             MessageBox.Show("Transfert des colonnes en fonction des template terminé", "Transfert terminé", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void FindAndCopyAttribute(Excel.Worksheet bruteWorksheet, Excel.Worksheet templateWorksheet, Excel.Workbook dataBook, 
+        private void FindAndCopyAttribute(Excel.Worksheet bruteWorksheet, Excel.Worksheet templateWorksheet, Excel.Workbook dataBook,
             List<TagnameSheet> attributNameMasks, Dictionary<string, OldTagnameSheet> oldTagnames, int rowTemplate)
         {
             foreach (TagnameSheet attributNameMask in attributNameMasks)
@@ -488,16 +490,13 @@ namespace AAMigrate
                         }
                     }
                 }
-                if (oldTagnames.ContainsKey(attributNameMask.Name))
+                if (oldTagnames.ContainsKey(attributNameMask.Name) && LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
                 {
-                    if (LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
-                    {
-                        bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
+                    bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
 
-                        if (!(dataBook is null))
-                        {
-                            dataBook.ActiveSheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-                        }
+                    if (!(dataBook is null))
+                    {
+                        dataBook.ActiveSheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
                     }
                 }
             }
@@ -505,12 +504,15 @@ namespace AAMigrate
 
         private void ClearStyleSheetButton_Click(object sender, RibbonControlEventArgs e)
         {
-            Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
-            int lastRow = displayWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row + 1;
-
-            for(int iRow = 1; iRow < lastRow; iRow++)
+            if(MessageBox.Show("Voulez-vous effacer tous les marquages ?", "Effacer les marquage", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                displayWorksheet.Range[$"{iRow}:{iRow}"].Style = "Normal";
+                Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+                int lastRow = displayWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row + 1;
+
+                for(int iRow = 1; iRow < lastRow; iRow++)
+                {
+                    displayWorksheet.Range[$"{iRow}:{iRow}"].Style = "Normal";
+                }
             }
         }
 
@@ -552,20 +554,38 @@ namespace AAMigrate
 
         private void DoNotMigrateButton_Click(object sender, RibbonControlEventArgs e)
         {
-            int row = Globals.ThisAddIn.Application.ActiveCell.Row;
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            displayWorksheet.Range[$"{row}:{row}"].Interior.Color = System.Drawing.Color.Black;
-            displayWorksheet.Range[$"{row}:{row}"].Font.Color = Color.White;
-            displayWorksheet.Range[$"{row}:{row}"].Font.Strikethrough = true;
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            {
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
+
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = System.Drawing.Color.Black;
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Color = Color.White;
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Strikethrough = true;
+            }
         }
 
         private void UnmarkRowButton_Click(object sender, RibbonControlEventArgs e)
         {
-            int row = Globals.ThisAddIn.Application.ActiveCell.Row;
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            displayWorksheet.Range[$"{row}:{row}"].Style = "Normal";
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            {
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
+            }
+        }
+
+        private void ManualMigrationButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            {
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
+
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(255, 192, 0);
+            }
         }
     }
 }
