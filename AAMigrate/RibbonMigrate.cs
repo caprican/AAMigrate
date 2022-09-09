@@ -583,8 +583,17 @@ namespace AAMigrate
             foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
             {
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
-
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(255, 192, 0);
+            }
+        }
+
+        private void TempMarkbutton_Click(object sender, RibbonControlEventArgs e)
+        {
+            Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            {
+                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(0, 112, 192);
             }
         }
     }

@@ -36,14 +36,15 @@
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.aaGroup = this.Factory.CreateRibbonGroup();
-            this.group1 = this.Factory.CreateRibbonGroup();
             this.OrderColumnButton = this.Factory.CreateRibbonButton();
             this.ExportsButton = this.Factory.CreateRibbonButton();
             this.GenerateFileButton = this.Factory.CreateRibbonButton();
+            this.group1 = this.Factory.CreateRibbonGroup();
             this.DoNotMigrateButton = this.Factory.CreateRibbonButton();
             this.ManualMigrationButton = this.Factory.CreateRibbonButton();
             this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
+            this.TempMarkbutton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
             this.group1.SuspendLayout();
@@ -64,15 +65,6 @@
             this.aaGroup.Items.Add(this.GenerateFileButton);
             this.aaGroup.Label = "ArchestrA";
             this.aaGroup.Name = "aaGroup";
-            // 
-            // group1
-            // 
-            this.group1.Items.Add(this.DoNotMigrateButton);
-            this.group1.Items.Add(this.ManualMigrationButton);
-            this.group1.Items.Add(this.UnmarkRowButton);
-            this.group1.Items.Add(this.ClearStyleSheetButton);
-            this.group1.Label = "Marquage ligne";
-            this.group1.Name = "group1";
             // 
             // OrderColumnButton
             // 
@@ -100,6 +92,16 @@
             this.GenerateFileButton.OfficeImageId = "GetPowerQueryDataFromCsv";
             this.GenerateFileButton.ShowImage = true;
             this.GenerateFileButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.GenerateFileButton_Click);
+            // 
+            // group1
+            // 
+            this.group1.Items.Add(this.TempMarkbutton);
+            this.group1.Items.Add(this.DoNotMigrateButton);
+            this.group1.Items.Add(this.ManualMigrationButton);
+            this.group1.Items.Add(this.UnmarkRowButton);
+            this.group1.Items.Add(this.ClearStyleSheetButton);
+            this.group1.Label = "Marquage ligne";
+            this.group1.Name = "group1";
             // 
             // DoNotMigrateButton
             // 
@@ -135,6 +137,15 @@
             this.ClearStyleSheetButton.ShowImage = true;
             this.ClearStyleSheetButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ClearStyleSheetButton_Click);
             // 
+            // TempMarkbutton
+            // 
+            this.TempMarkbutton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.TempMarkbutton.Label = "Temporaire";
+            this.TempMarkbutton.Name = "TempMarkbutton";
+            this.TempMarkbutton.OfficeImageId = "SparkLineNegativePointColorPicker";
+            this.TempMarkbutton.ShowImage = true;
+            this.TempMarkbutton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.TempMarkbutton_Click);
+            // 
             // RibbonMigrate
             // 
             this.Name = "RibbonMigrate";
@@ -163,6 +174,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ClearStyleSheetButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ManualMigrationButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton TempMarkbutton;
     }
 
     partial class ThisRibbonCollection
