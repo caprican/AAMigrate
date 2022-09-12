@@ -36,6 +36,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AttributesBox
@@ -109,18 +110,30 @@
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Ignore;
-            this.button2.Location = new System.Drawing.Point(472, 766);
+            this.button2.Location = new System.Drawing.Point(744, 766);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(195, 67);
             this.button2.TabIndex = 7;
             this.button2.Text = "Suivant";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.DialogResult = System.Windows.Forms.DialogResult.Retry;
+            this.button3.Location = new System.Drawing.Point(282, 766);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(402, 67);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Ne plus demander et migrer que les instances identique";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
             // DiffOldTagnamesAttributesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1152, 845);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -147,5 +160,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

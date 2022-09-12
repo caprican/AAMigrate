@@ -412,6 +412,7 @@ namespace AAMigrate
 
             int rowTemplate = 3;
             int endRowBruteSheet = bruteWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row;
+            bool copyOnlyEqualAttributes = false;
             for(int iBruteRow = 1; iBruteRow < endRowBruteSheet; iBruteRow++)
             {
                 if (LineIsFree(bruteWorksheet.Range[$"A{iBruteRow}"]) && bruteWorksheet.Range[$"A{iBruteRow}"].Value is string firstTagname &&
@@ -421,18 +422,24 @@ namespace AAMigrate
 
                     if (attributNameMasks.Count != oldTagnames.Count)
                     {
-                        var windows = new DiffOldTagnamesAttributesForm(attributNameMasks.Select(attribute => attribute.Name).ToList(), oldTagnames.Select(tag => tag.Value.Tagname).ToList());
-                        switch(windows.ShowDialog())
+                        if(!copyOnlyEqualAttributes)
                         {
-                            case DialogResult.Ignore:
-                                break;
-                            case DialogResult.OK:
-                                FindAndCopyAttribute(bruteWorksheet, templateWorksheet, dataBook, attributNameMasks, oldTagnames, rowTemplate);
-                                rowTemplate++;
-                                break;
-                            case DialogResult.Abort:
-                                AutoFill(templateWorksheet);
-                                return;
+                            var windows = new DiffOldTagnamesAttributesForm(attributNameMasks.Select(attribute => attribute.Name).ToList(), oldTagnames.Select(tag => tag.Value.Tagname).ToList());
+                            switch(windows.ShowDialog())
+                            {
+                                case DialogResult.Ignore:
+                                    break;
+                                case DialogResult.OK:
+                                    FindAndCopyAttribute(bruteWorksheet, templateWorksheet, dataBook, attributNameMasks, oldTagnames, rowTemplate);
+                                    rowTemplate++;
+                                    break;
+                                case DialogResult.Retry:
+                                    copyOnlyEqualAttributes = true;
+                                    break;
+                                case DialogResult.Abort:
+                                    AutoFill(templateWorksheet);
+                                    return;
+                            }
                         }
                     }
                     else
@@ -532,7 +539,6 @@ namespace AAMigrate
                 }
             }
 
-
             if (exportSheet is null || templateSheets.Count == 0)
             {
                 return;
@@ -541,15 +547,31 @@ namespace AAMigrate
             int row = 1;
             foreach(Excel.Worksheet templateSheet in templateSheets)
             {
-                templateSheet.UsedRange.Copy();
-                exportSheet.Range[$"A{row}"].PasteSpecial(XlPasteType.xlPasteValues);
+                Range lastCell = templateSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell);
+                int lastRow = templateSheet.Range["A4"].MergeCells ? 3 : lastCell.Row;
+                templateSheet.Range[$"1:{lastRow}"].Copy();
+                exportSheet.Range[$"{row}:{row + lastRow}"].PasteSpecial(XlPasteType.xlPasteValues);
 
-                int lastColumn = exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Column;
-                exportSheet.Range[$"B{row}:{GetExcelColumnName(lastColumn)}{row}"].Value = string.Empty;
+                for (int iRow = row; iRow <= lastRow; iRow++)
+                {
+                    for (int iColumn = 1; iColumn <= lastCell.Column; iColumn++)
+                    {
+                        if (templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Interior.Color != templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].Interior.Color)
+                            exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Interior.Color = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Interior.Color;
 
+                        if (templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Color < 10_000_000)
+                            exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Font.Color = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Color;
+                        exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Font.Bold = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Bold;
+                        exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Font.Italic = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Italic;
+                        exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Font.Strikethrough = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Strikethrough;
+                        exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Font.Underline = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Underline;
+                        //exportSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow}"].Font.Size = templateSheet.Range[$"{GetExcelColumnName(iColumn)}{iRow - row + 1}"].DisplayFormat.Font.Size;
+                    }
+                }
+
+                exportSheet.Range[$"B{row}:{GetExcelColumnName(exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Column)}{row}"].Value = string.Empty;
                 row = exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Row + 2;
             }
-
         }
 
         private void DoNotMigrateButton_Click(object sender, RibbonControlEventArgs e)

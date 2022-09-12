@@ -40,11 +40,11 @@
             this.ExportsButton = this.Factory.CreateRibbonButton();
             this.GenerateFileButton = this.Factory.CreateRibbonButton();
             this.group1 = this.Factory.CreateRibbonGroup();
+            this.TempMarkbutton = this.Factory.CreateRibbonButton();
             this.DoNotMigrateButton = this.Factory.CreateRibbonButton();
             this.ManualMigrationButton = this.Factory.CreateRibbonButton();
             this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
-            this.TempMarkbutton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
             this.group1.SuspendLayout();
@@ -103,6 +103,15 @@
             this.group1.Label = "Marquage ligne";
             this.group1.Name = "group1";
             // 
+            // TempMarkbutton
+            // 
+            this.TempMarkbutton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.TempMarkbutton.Label = "Temporaire";
+            this.TempMarkbutton.Name = "TempMarkbutton";
+            this.TempMarkbutton.OfficeImageId = "SparkLineNegativePointColorPicker";
+            this.TempMarkbutton.ShowImage = true;
+            this.TempMarkbutton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.TempMarkbutton_Click);
+            // 
             // DoNotMigrateButton
             // 
             this.DoNotMigrateButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -136,15 +145,6 @@
             this.ClearStyleSheetButton.OfficeImageId = "ClearFormats";
             this.ClearStyleSheetButton.ShowImage = true;
             this.ClearStyleSheetButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ClearStyleSheetButton_Click);
-            // 
-            // TempMarkbutton
-            // 
-            this.TempMarkbutton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.TempMarkbutton.Label = "Temporaire";
-            this.TempMarkbutton.Name = "TempMarkbutton";
-            this.TempMarkbutton.OfficeImageId = "SparkLineNegativePointColorPicker";
-            this.TempMarkbutton.ShowImage = true;
-            this.TempMarkbutton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.TempMarkbutton_Click);
             // 
             // RibbonMigrate
             // 
