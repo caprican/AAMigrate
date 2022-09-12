@@ -59,7 +59,7 @@ namespace AAMigrate
                 }
 
                 bool ActiveSheetIsExport = (ActiveWorsheet.Name == "Export");
-                Globals.ThisAddIn.Application.ActiveSheet.SaveAs(FileSave, FileFormat:62/*Excel.XlFileFormat.xlCSVUTF8*/, Local: false, AccessMode: XlSaveAsAccessMode.xlNoChange);
+                Globals.ThisAddIn.Application.ActiveSheet.SaveAs(FileSave, FileFormat:62/*Excel.XlFileFormat.xlCSVUTF8*/, Local: false/*, AccessMode: XlSaveAsAccessMode.xlNoChange*/);
 
                 if (ActiveSheetIsExport || (ActiveWorsheet != Globals.ThisAddIn.Application.ActiveSheet))
                     Globals.ThisAddIn.Application.ActiveSheet.Name = "Export";
