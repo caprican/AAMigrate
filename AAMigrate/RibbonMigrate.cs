@@ -509,20 +509,6 @@ namespace AAMigrate
             }
         }
 
-        private void ClearStyleSheetButton_Click(object sender, RibbonControlEventArgs e)
-        {
-            if(MessageBox.Show("Voulez-vous effacer tous les marquages ?", "Effacer les marquage", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
-                int lastRow = displayWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row + 1;
-
-                for(int iRow = 1; iRow < lastRow; iRow++)
-                {
-                    displayWorksheet.Range[$"{iRow}:{iRow}"].Style = "Normal";
-                }
-            }
-        }
-
         private void ExportsButton_Click(object sender, RibbonControlEventArgs e)
         {
             Excel.Worksheet exportSheet = null;
@@ -578,7 +564,7 @@ namespace AAMigrate
         {
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
             {
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
 
@@ -592,7 +578,7 @@ namespace AAMigrate
         {
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
             {
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
             }
@@ -602,7 +588,7 @@ namespace AAMigrate
         {
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
             {
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(255, 192, 0);
@@ -613,9 +599,23 @@ namespace AAMigrate
         {
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
-            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection)
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
             {
                 displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(0, 112, 192);
+            }
+        }
+
+        private void ClearStyleSheetButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            if(MessageBox.Show("Voulez-vous effacer tous les marquages ?", "Effacer les marquage", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+                int lastRow = displayWorksheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing).Row + 1;
+
+                for(int iRow = 1; iRow < lastRow; iRow++)
+                {
+                    displayWorksheet.Range[$"{iRow}:{iRow}"].Style = "Normal";
+                }
             }
         }
     }
