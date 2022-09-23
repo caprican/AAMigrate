@@ -1,7 +1,36 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AAMigrate.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NewTemplateMark" Type="System.String" Scope="User">
+      <Value Profile="(Default)">_NEW</Value>
+    </Setting>
+    <Setting Name="NewTemplateMarkPosition" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="OldTemplateMark" Type="System.String" Scope="User">
+      <Value Profile="(Default)">_OLD</Value>
+    </Setting>
+    <Setting Name="OldTemplateMarkPosition" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="SheetDataBruteMark" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Brute</Value>
+    </Setting>
+    <Setting Name="SheetDataBruteMarkPosition" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="OldTemplateConcatMark" Type="System.String" Scope="User">
+      <Value Profile="(Default)">$templates</Value>
+    </Setting>
+    <Setting Name="OldTemplateConcatMarkPosition" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SheetExportMark" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Export</Value>
+    </Setting>
+    <Setting Name="SheetExportMarkPosition" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

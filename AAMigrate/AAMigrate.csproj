@@ -33,7 +33,7 @@
     <PublishUrl>publish\</PublishUrl>
     <InstallUrl />
     <TargetCulture>fr</TargetCulture>
-    <ApplicationVersion>1.0.0.24</ApplicationVersion>
+    <ApplicationVersion>1.0.0.25</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -191,12 +191,20 @@
     <Compile Include="DiffOldTagnamesAttributesForm.Designer.cs">
       <DependentUpon>DiffOldTagnamesAttributesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetSheet.cs" />
+    <Compile Include="NewTemplateMarkPosition.cs" />
     <Compile Include="OldTagnameSheet.cs" />
     <Compile Include="SelectBook.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SelectBook.Designer.cs">
       <DependentUpon>SelectBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TagnameSheet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -223,7 +231,11 @@
     <EmbeddedResource Include="SelectBook.resx">
       <DependentUpon>SelectBook.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="AAMigrate_TemporaryKey.pfx" />
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -231,6 +243,7 @@
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RibbonMigrate.cs">
       <SubType>Component</SubType>

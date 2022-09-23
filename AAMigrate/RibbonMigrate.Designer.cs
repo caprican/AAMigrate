@@ -45,6 +45,7 @@
             this.ManualMigrationButton = this.Factory.CreateRibbonButton();
             this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
+            this.SettingsButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
             this.group1.SuspendLayout();
@@ -146,9 +147,20 @@
             this.ClearStyleSheetButton.ShowImage = true;
             this.ClearStyleSheetButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ClearStyleSheetButton_Click);
             // 
+            // SettingsButton
+            // 
+            this.SettingsButton.Label = "Migrate settings";
+            this.SettingsButton.Name = "SettingsButton";
+            this.SettingsButton.ShowImage = true;
+            this.SettingsButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.SettingsButton_Click);
+            // 
             // RibbonMigrate
             // 
             this.Name = "RibbonMigrate";
+            // 
+            // RibbonMigrate.OfficeMenu
+            // 
+            this.OfficeMenu.Items.Add(this.SettingsButton);
             this.RibbonType = "Microsoft.Excel.Workbook";
             this.Tabs.Add(this.tab1);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.RibbonMigrate_Load);
@@ -175,6 +187,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ManualMigrationButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton TempMarkbutton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton SettingsButton;
     }
 
     partial class ThisRibbonCollection

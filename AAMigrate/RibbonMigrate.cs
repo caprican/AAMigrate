@@ -1,27 +1,24 @@
-﻿using Microsoft.Office.Tools.Ribbon;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Windows.Forms;
+
+using Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Tools.Ribbon;
 
 using Excel = Microsoft.Office.Interop.Excel;
-using Office = Microsoft.Office.Core;
-using Microsoft.Office.Tools.Excel;
-
-using System.Windows.Forms;
-using System.Drawing;
-using Microsoft.Office.Interop.Excel;
-using System.Reflection;
-using System.Collections;
-using System.Data.Common;
 
 namespace AAMigrate
 {
     public partial class RibbonMigrate
     {
+        private static readonly int FreeColor = Color.Transparent.ToArgb();
+        private static readonly Color AlreadyMigrateColor = Color.DarkBlue;
+        private static readonly Color MigrateRowColor = System.Drawing.Color.FromArgb(169, 208, 142);
+
         private void RibbonMigrate_Load(object sender, RibbonUIEventArgs e)
         {
-
         }
 
         private void GenerateFileButton_Click(object sender, RibbonControlEventArgs e)
@@ -51,18 +48,21 @@ namespace AAMigrate
 
                 foreach (Excel.Worksheet displayWorksheet in Globals.ThisAddIn.Application.Sheets)
                 {
-                    if (displayWorksheet.Name == "Export")
+                    if (IsSheet(displayWorksheet.Name, GetSheet.Export))
                     {
                         displayWorksheet.Activate();
                         break;
                     }
                 }
 
-                bool ActiveSheetIsExport = (ActiveWorsheet.Name == "Export");
+                bool ActiveSheetIsExport = IsSheet(ActiveWorsheet.Name, GetSheet.Export);
+                string SheetName = ActiveWorsheet.Name;
                 Globals.ThisAddIn.Application.ActiveSheet.SaveAs(FileSave, FileFormat:62/*Excel.XlFileFormat.xlCSVUTF8*/, Local: false/*, AccessMode: XlSaveAsAccessMode.xlNoChange*/);
 
                 if (ActiveSheetIsExport || (ActiveWorsheet != Globals.ThisAddIn.Application.ActiveSheet))
-                    Globals.ThisAddIn.Application.ActiveSheet.Name = "Export";
+                {
+                    Globals.ThisAddIn.Application.ActiveSheet.Name = SheetName;
+                }
 
                 ActiveWorsheet.Activate();
 
@@ -79,7 +79,7 @@ namespace AAMigrate
             foreach (Excel.Worksheet displayWorksheet in Globals.ThisAddIn.Application.Sheets)
                 workSheetName.Add(displayWorksheet.Name);
 
-            if (Globals.ThisAddIn.Application.Sheets.Count < 3 || !workSheetName.Any(a => a == "Brute") || !workSheetName.Any(a => a.StartsWith("$")) || !workSheetName.Any(a => a.StartsWith("$ST_")))
+            if (Globals.ThisAddIn.Application.Sheets.Count < 3 || !workSheetName.Any(a => IsSheet(a, GetSheet.DataSource)) || !workSheetName.Any(a => IsSheet(a, GetSheet.OldTemplate)) || !workSheetName.Any(a => IsSheet(a, GetSheet.NewTemplate)))
             {
                 MessageBox.Show("La structure des feuilles ne correspond pas au modèle", "Incohérence modèle", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -115,23 +115,23 @@ namespace AAMigrate
             Excel.Worksheet bruteWorksheet = null, templateWorksheet = null;
             foreach (Excel.Worksheet displayWorksheet in Globals.ThisAddIn.Application.Sheets)
             {
-                if (displayWorksheet.Name == "Brute")
+                if (IsSheet(displayWorksheet.Name, GetSheet.DataSource))
                 {
                     displayWorksheet.Activate();
                     bruteWorksheet = displayWorksheet;
                 }
-                else if (displayWorksheet.Name == "$templates")
+                else if (IsSheet(displayWorksheet.Name, GetSheet.ConcatOldTemplate))
                 {
                     templateWorksheet = displayWorksheet;
                 }
-                else if (displayWorksheet.Name == $"{workSheetName.First(f => f.StartsWith("$") && !f.StartsWith("$ST_"))}")
+                else if (displayWorksheet.Name == $"{workSheetName.First(f => IsSheet(f, GetSheet.OldTemplate) && !IsSheet(f, GetSheet.NewTemplate))}")
                 {
                     templateWorksheet = displayWorksheet;
                 }
             }
 
-            if (!workSheetName.Any(a => a == "$templates"))
-                CopyColumnFromTemplate(OriginalBook, bruteWorksheet, templateWorksheet, workSheetName.Find(f => f.StartsWith("$") && !f.StartsWith("$ST_")));
+            if (!workSheetName.Any(sheetName => IsSheet(sheetName, GetSheet.ConcatOldTemplate)))
+                CopyColumnFromTemplate(OriginalBook, bruteWorksheet, templateWorksheet, templateWorksheet.Name);
             else
                 MergeTemplate(OriginalBook, bruteWorksheet, templateWorksheet);
         }
@@ -151,7 +151,6 @@ namespace AAMigrate
         }
 
         private static bool LineIsFree(Excel.Range range) => (int)range.Interior.Color == FreeColor;
-        private static readonly int FreeColor = Color.Transparent.ToArgb();
 
         private void LineAlreadyMigred(Excel.Worksheet bruteWorksheet)
         {
@@ -159,7 +158,7 @@ namespace AAMigrate
             {
                 if (!LineIsFree(bruteWorksheet.Range[$"{iBruteRow}:{iBruteRow}"]))
                 {
-                    bruteWorksheet.Range[$"{iBruteRow}:{iBruteRow}"].Interior.Color = System.Drawing.Color.DarkBlue;
+                    bruteWorksheet.Range[$"{iBruteRow}:{iBruteRow}"].Interior.Color = AlreadyMigrateColor;
                 }
             }
         }
@@ -216,26 +215,26 @@ namespace AAMigrate
 
                     int rowDest = 3;
 
-                    for (int i = startTemplate; i <= endTemplate; i++)
+                    for (int row = startTemplate; row <= endTemplate; row++)
                     {
-                        if (LineIsFree(bruteWorksheet.Range[$"{colOrig}{i}"]))
+                        if (LineIsFree(bruteWorksheet.Range[$"{colOrig}{row}"]))
                         {
-                            if (!(bruteWorksheet.Range[$"{colOrig}{i}"].Value is null))
+                            if (!(bruteWorksheet.Range[$"{colOrig}{row}"].Value is null))
                             {
-                                templateWorksheet.Range[$"{colDest}{rowDest}"].Value = $"={bruteWorksheet.Name}!{colOrig}{i}";
+                                templateWorksheet.Range[$"{colDest}{rowDest}"].Value = $"={bruteWorksheet.Name}!{colOrig}{row}";
                             }
                             else
                             {
                                 templateWorksheet.Range[$"{colDest}{rowDest}"].ClearComments();
-                                templateWorksheet.Range[$"{colDest}{rowDest}"].AddComment($"Source : {bruteWorksheet.Name}!{colOrig}{i}");
+                                templateWorksheet.Range[$"{colDest}{rowDest}"].AddComment($"Source : {bruteWorksheet.Name}!{colOrig}{row}");
                             }
 
-                            UpperCell(bruteWorksheet, findAttribute.Column, i);
+                            UpperCell(bruteWorksheet, findAttribute.Column, row);
                             rowDest++;
 
                             if (!(dataBook is null))
                             {
-                                UpperCell(dataBook.ActiveSheet, findAttribute.Column, i);
+                                UpperCell(dataBook.ActiveSheet, findAttribute.Column, row);
                             }
                         }
                     }
@@ -248,20 +247,13 @@ namespace AAMigrate
                 indColumn++;
             }
 
-            #region coloration des ligne
-            for (int i = startTemplate; i <= endTemplate; i++)
+            for (int row = startTemplate; row <= endTemplate; row++)
             {
-                if (LineIsFree(bruteWorksheet.Range[$"A{i}"]))
+                if (LineIsFree(bruteWorksheet.Range[$"A{row}"]))
                 {
-                    bruteWorksheet.Range[$"{i}:{i}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-
-                    if (!(dataBook is null))
-                    {
-                        dataBook.ActiveSheet.Range[$"{i}:{i}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-                    }
+                    UpperRow(dataBook, bruteWorksheet, row);
                 }
             }
-            #endregion
 
             AutoFill(templateWorksheet);
 
@@ -370,6 +362,15 @@ namespace AAMigrate
             return oldTagnameRow;
         }
 
+        private void UpperRow(Excel.Workbook dataBook, Excel.Worksheet worksheet, int row)
+        {
+            worksheet.Range[$"{row}:{row}"].Interior.Color = MigrateRowColor;
+            if(!(dataBook is null))
+            {
+                dataBook.ActiveSheet.Range[$"{row}:{row}"].Interior.Color = MigrateRowColor;
+            }
+        }
+
         private void UpperCell(Excel.Worksheet worksheet, int column, int row)
         {
             worksheet.Range[$"{GetExcelColumnName(column)}{row}"].Font.Bold = true;
@@ -381,12 +382,73 @@ namespace AAMigrate
             foreach (Excel.Worksheet sheet in Globals.ThisAddIn.Application.Sheets)
             {
                 int lastRowTemplate = templateWorksheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
-                if (sheet.Name.StartsWith("$ST_") && lastRowTemplate > 3)
+                if (IsSheet(sheet.Name, GetSheet.NewTemplate) && lastRowTemplate > 3)
                 {
                     try { sheet.Range["3:3"].AutoFill(sheet.Range[$"3:{lastRowTemplate}"]); }
                     catch { }
                 }
             }
+        }
+
+        private bool IsSheet(string name, GetSheet getSheet)
+        {
+            NewTemplateMarkPosition markPosition;
+            switch(getSheet)
+            {
+                case GetSheet.DataSource:
+                    markPosition = (NewTemplateMarkPosition)Properties.Settings.Default.SheetDataBruteMarkPosition;
+                    break;
+                case GetSheet.OldTemplate:
+                    markPosition = (NewTemplateMarkPosition)Properties.Settings.Default.OldTemplateMarkPosition;
+                    break;
+                case GetSheet.ConcatOldTemplate:
+                    markPosition = (NewTemplateMarkPosition)Properties.Settings.Default.OldTemplateConcatMarkPosition;
+                    break;
+                case GetSheet.NewTemplate:
+                    markPosition = (NewTemplateMarkPosition)Properties.Settings.Default.NewTemplateMarkPosition;
+                    break;
+                case GetSheet.Export:
+                    markPosition = (NewTemplateMarkPosition)Properties.Settings.Default.SheetExportMarkPosition;
+                    break;
+                default:
+                    markPosition = NewTemplateMarkPosition.Unknow;
+                    break;
+            }
+
+            string mark = string.Empty;
+            switch (getSheet)
+            {
+                case GetSheet.DataSource:
+                    mark = Properties.Settings.Default.SheetDataBruteMark;
+                    break;
+                case GetSheet.OldTemplate:
+                    mark = Properties.Settings.Default.OldTemplateMark;
+                    break;
+                case GetSheet.ConcatOldTemplate:
+                    mark = Properties.Settings.Default.OldTemplateConcatMark;
+                    break;
+                case GetSheet.NewTemplate:
+                    mark = Properties.Settings.Default.NewTemplateMark;
+                    break;
+                case GetSheet.Export:
+                    mark = Properties.Settings.Default.SheetExportMark;
+                    break;
+            }
+
+            switch (markPosition)
+            {
+                case NewTemplateMarkPosition.Unknow:
+                    return name == mark;
+                case NewTemplateMarkPosition.StartsWith:
+                    return name.StartsWith(mark);
+                case NewTemplateMarkPosition.EndsWith:
+                    return name.EndsWith(mark);
+                case NewTemplateMarkPosition.Containt:
+                    return name.Contains(mark);
+                case NewTemplateMarkPosition.NoContaint:
+                    return !name.Contains(mark);
+            }
+            return false;
         }
 
         private void MergeTemplate(Excel.Workbook dataBook, Excel.Worksheet bruteWorksheet, Excel.Worksheet templateWorksheet)
@@ -499,14 +561,11 @@ namespace AAMigrate
                 }
                 if (oldTagnames.ContainsKey(attributNameMask.Name) && LineIsFree(bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"]))
                 {
-                    bruteWorksheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-
-                    if (!(dataBook is null))
-                    {
-                        dataBook.ActiveSheet.Range[$"{oldTagnames[attributNameMask.Name].Row}:{oldTagnames[attributNameMask.Name].Row}"].Interior.Color = System.Drawing.Color.FromArgb(169, 208, 142);
-                    }
+                    UpperRow(dataBook, bruteWorksheet, oldTagnames[attributNameMask.Name].Row);
                 }
             }
+
+            MessageBox.Show("Transfert des colonnes en fonction des template terminé", "Transfert terminé", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ExportsButton_Click(object sender, RibbonControlEventArgs e)
@@ -515,11 +574,11 @@ namespace AAMigrate
             List<Excel.Worksheet> templateSheets = new List<Excel.Worksheet>();
             foreach (Excel.Worksheet displayWorksheet in Globals.ThisAddIn.Application.Sheets)
             {
-                if (displayWorksheet.Name == "Export")
+                if (IsSheet(displayWorksheet.Name, GetSheet.Export))
                 {
                     exportSheet = displayWorksheet;
                 }
-                else if(displayWorksheet.Name.StartsWith("$ST_"))
+                else if(IsSheet(displayWorksheet.Name, GetSheet.NewTemplate))
                 {
                     templateSheets.Add(displayWorksheet);
                 }
@@ -601,7 +660,10 @@ namespace AAMigrate
 
             foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
             {
-                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(0, 112, 192);
+                if(LineIsFree(cell))
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = Color.FromArgb(0, 112, 192);
+                else
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
             }
         }
 
@@ -616,6 +678,15 @@ namespace AAMigrate
                 {
                     displayWorksheet.Range[$"{iRow}:{iRow}"].Style = "Normal";
                 }
+            }
+        }
+
+        private void SettingsButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            var Settings = new SettingsForm();
+            if(Settings.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.Save();
             }
         }
     }
