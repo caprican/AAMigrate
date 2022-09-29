@@ -52,10 +52,10 @@
             // 
             this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SaveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.SaveButton.Location = new System.Drawing.Point(228, 157);
-            this.SaveButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SaveButton.Location = new System.Drawing.Point(562, 302);
+            this.SaveButton.Margin = new System.Windows.Forms.Padding(4);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(80, 25);
+            this.SaveButton.Size = new System.Drawing.Size(160, 48);
             this.SaveButton.TabIndex = 0;
             this.SaveButton.Text = "Enregistrer";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -70,28 +70,28 @@
             "Ne contenant pas",
             "Commençant par",
             "Se terminant par"});
-            this.cBSheetNameNewTemplate.Location = new System.Drawing.Point(238, 92);
-            this.cBSheetNameNewTemplate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cBSheetNameNewTemplate.Location = new System.Drawing.Point(476, 177);
+            this.cBSheetNameNewTemplate.Margin = new System.Windows.Forms.Padding(4);
             this.cBSheetNameNewTemplate.Name = "cBSheetNameNewTemplate";
-            this.cBSheetNameNewTemplate.Size = new System.Drawing.Size(62, 21);
+            this.cBSheetNameNewTemplate.Size = new System.Drawing.Size(226, 33);
             this.cBSheetNameNewTemplate.TabIndex = 2;
             // 
             // tbSheetNameNewTemplate
             // 
-            this.tbSheetNameNewTemplate.Location = new System.Drawing.Point(122, 92);
-            this.tbSheetNameNewTemplate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSheetNameNewTemplate.Location = new System.Drawing.Point(244, 177);
+            this.tbSheetNameNewTemplate.Margin = new System.Windows.Forms.Padding(4);
             this.tbSheetNameNewTemplate.Name = "tbSheetNameNewTemplate";
-            this.tbSheetNameNewTemplate.Size = new System.Drawing.Size(112, 20);
+            this.tbSheetNameNewTemplate.Size = new System.Drawing.Size(220, 31);
             this.tbSheetNameNewTemplate.TabIndex = 3;
             // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.bCancel.Location = new System.Drawing.Point(144, 157);
-            this.bCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bCancel.Location = new System.Drawing.Point(394, 302);
+            this.bCancel.Margin = new System.Windows.Forms.Padding(4);
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(80, 25);
+            this.bCancel.Size = new System.Drawing.Size(160, 48);
             this.bCancel.TabIndex = 4;
             this.bCancel.Text = "Fermer";
             this.bCancel.UseVisualStyleBackColor = true;
@@ -99,47 +99,47 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 95);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(10, 183);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 13);
+            this.label1.Size = new System.Drawing.Size(229, 25);
             this.label1.TabIndex = 5;
             this.label1.Text = "Feuille nouveau model";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 71);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(12, 137);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 13);
+            this.label2.Size = new System.Drawing.Size(225, 25);
             this.label2.TabIndex = 8;
             this.label2.Text = "Concat ancien models";
             // 
             // tbSheetNameOldConcatTemplate
             // 
-            this.tbSheetNameOldConcatTemplate.Location = new System.Drawing.Point(122, 68);
-            this.tbSheetNameOldConcatTemplate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSheetNameOldConcatTemplate.Location = new System.Drawing.Point(244, 131);
+            this.tbSheetNameOldConcatTemplate.Margin = new System.Windows.Forms.Padding(4);
             this.tbSheetNameOldConcatTemplate.Name = "tbSheetNameOldConcatTemplate";
-            this.tbSheetNameOldConcatTemplate.Size = new System.Drawing.Size(112, 20);
+            this.tbSheetNameOldConcatTemplate.Size = new System.Drawing.Size(220, 31);
             this.tbSheetNameOldConcatTemplate.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 47);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(30, 90);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(103, 13);
+            this.label3.Size = new System.Drawing.Size(210, 25);
             this.label3.TabIndex = 11;
             this.label3.Text = "Feuille ancien model";
             // 
             // tbSheetNameOldTemplate
             // 
-            this.tbSheetNameOldTemplate.Location = new System.Drawing.Point(122, 44);
-            this.tbSheetNameOldTemplate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSheetNameOldTemplate.Location = new System.Drawing.Point(244, 85);
+            this.tbSheetNameOldTemplate.Margin = new System.Windows.Forms.Padding(4);
             this.tbSheetNameOldTemplate.Name = "tbSheetNameOldTemplate";
-            this.tbSheetNameOldTemplate.Size = new System.Drawing.Size(112, 20);
+            this.tbSheetNameOldTemplate.Size = new System.Drawing.Size(220, 31);
             this.tbSheetNameOldTemplate.TabIndex = 10;
             // 
             // cBSheetNameOldTemplate
@@ -151,28 +151,28 @@
             "Ne contenant pas",
             "Commençant par",
             "Se terminant par"});
-            this.cBSheetNameOldTemplate.Location = new System.Drawing.Point(238, 44);
-            this.cBSheetNameOldTemplate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cBSheetNameOldTemplate.Location = new System.Drawing.Point(476, 85);
+            this.cBSheetNameOldTemplate.Margin = new System.Windows.Forms.Padding(4);
             this.cBSheetNameOldTemplate.Name = "cBSheetNameOldTemplate";
-            this.cBSheetNameOldTemplate.Size = new System.Drawing.Size(62, 21);
+            this.cBSheetNameOldTemplate.Size = new System.Drawing.Size(226, 33);
             this.cBSheetNameOldTemplate.TabIndex = 9;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(5, 23);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(10, 44);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(113, 13);
+            this.label4.Size = new System.Drawing.Size(231, 25);
             this.label4.TabIndex = 14;
             this.label4.Text = "Feuilles données brute";
             // 
             // tbSheetBrute
             // 
-            this.tbSheetBrute.Location = new System.Drawing.Point(122, 20);
-            this.tbSheetBrute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSheetBrute.Location = new System.Drawing.Point(244, 38);
+            this.tbSheetBrute.Margin = new System.Windows.Forms.Padding(4);
             this.tbSheetBrute.Name = "tbSheetBrute";
-            this.tbSheetBrute.Size = new System.Drawing.Size(112, 20);
+            this.tbSheetBrute.Size = new System.Drawing.Size(220, 31);
             this.tbSheetBrute.TabIndex = 13;
             // 
             // cBSheetBrute
@@ -184,21 +184,20 @@
             "Ne contenant pas",
             "Commençant par",
             "Se terminant par"});
-            this.cBSheetBrute.Location = new System.Drawing.Point(238, 19);
-            this.cBSheetBrute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cBSheetBrute.Location = new System.Drawing.Point(476, 37);
+            this.cBSheetBrute.Margin = new System.Windows.Forms.Padding(4);
             this.cBSheetBrute.Name = "cBSheetBrute";
-            this.cBSheetBrute.Size = new System.Drawing.Size(62, 21);
+            this.cBSheetBrute.Size = new System.Drawing.Size(226, 33);
             this.cBSheetBrute.TabIndex = 12;
             // 
             // Defaultbutton
             // 
             this.Defaultbutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Defaultbutton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Defaultbutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Defaultbutton.Location = new System.Drawing.Point(11, 155);
-            this.Defaultbutton.Margin = new System.Windows.Forms.Padding(2);
+            this.Defaultbutton.Location = new System.Drawing.Point(22, 298);
+            this.Defaultbutton.Margin = new System.Windows.Forms.Padding(4);
             this.Defaultbutton.Name = "Defaultbutton";
-            this.Defaultbutton.Size = new System.Drawing.Size(65, 25);
+            this.Defaultbutton.Size = new System.Drawing.Size(130, 48);
             this.Defaultbutton.TabIndex = 15;
             this.Defaultbutton.Text = "Défaut";
             this.Defaultbutton.UseVisualStyleBackColor = true;
@@ -213,28 +212,28 @@
             "Ne contenant pas",
             "Commençant par",
             "Se terminant par"});
-            this.cBSheetNameOldConcatTemplate.Location = new System.Drawing.Point(238, 67);
-            this.cBSheetNameOldConcatTemplate.Margin = new System.Windows.Forms.Padding(2);
+            this.cBSheetNameOldConcatTemplate.Location = new System.Drawing.Point(476, 129);
+            this.cBSheetNameOldConcatTemplate.Margin = new System.Windows.Forms.Padding(4);
             this.cBSheetNameOldConcatTemplate.Name = "cBSheetNameOldConcatTemplate";
-            this.cBSheetNameOldConcatTemplate.Size = new System.Drawing.Size(62, 21);
+            this.cBSheetNameOldConcatTemplate.Size = new System.Drawing.Size(226, 33);
             this.cBSheetNameOldConcatTemplate.TabIndex = 16;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(41, 120);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Location = new System.Drawing.Point(82, 231);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(77, 13);
+            this.label5.Size = new System.Drawing.Size(158, 25);
             this.label5.TabIndex = 19;
             this.label5.Text = "Feuille d\'export";
             // 
             // tbSheetExport
             // 
-            this.tbSheetExport.Location = new System.Drawing.Point(122, 117);
-            this.tbSheetExport.Margin = new System.Windows.Forms.Padding(2);
+            this.tbSheetExport.Location = new System.Drawing.Point(244, 225);
+            this.tbSheetExport.Margin = new System.Windows.Forms.Padding(4);
             this.tbSheetExport.Name = "tbSheetExport";
-            this.tbSheetExport.Size = new System.Drawing.Size(112, 20);
+            this.tbSheetExport.Size = new System.Drawing.Size(220, 31);
             this.tbSheetExport.TabIndex = 18;
             // 
             // cBSheetExport
@@ -246,17 +245,17 @@
             "Ne contenant pas",
             "Commençant par",
             "Se terminant par"});
-            this.cBSheetExport.Location = new System.Drawing.Point(238, 117);
-            this.cBSheetExport.Margin = new System.Windows.Forms.Padding(2);
+            this.cBSheetExport.Location = new System.Drawing.Point(476, 225);
+            this.cBSheetExport.Margin = new System.Windows.Forms.Padding(4);
             this.cBSheetExport.Name = "cBSheetExport";
-            this.cBSheetExport.Size = new System.Drawing.Size(62, 21);
+            this.cBSheetExport.Size = new System.Drawing.Size(226, 33);
             this.cBSheetExport.TabIndex = 17;
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(319, 193);
+            this.ClientSize = new System.Drawing.Size(744, 371);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbSheetExport);
             this.Controls.Add(this.cBSheetExport);
@@ -276,7 +275,7 @@
             this.Controls.Add(this.cBSheetNameNewTemplate);
             this.Controls.Add(this.SaveButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SettingsForm";
             this.Text = "aa migrate settings";
             this.ResumeLayout(false);

@@ -597,7 +597,7 @@ namespace AAMigrate
                 templateSheet.Range[$"1:{lastRow}"].Copy();
                 exportSheet.Range[$"{row}:{row + lastRow}"].PasteSpecial(XlPasteType.xlPasteValues);
 
-                for (int iRow = row; iRow <= lastRow; iRow++)
+                for (int iRow = row; iRow <= lastRow + row; iRow++)
                 {
                     for (int iColumn = 1; iColumn <= lastCell.Column; iColumn++)
                     {
