@@ -619,17 +619,41 @@ namespace AAMigrate
             }
         }
 
+        private void DeletButton_Click(object sender, RibbonControlEventArgs e)
+        {
+            Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
+
+            foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
+            {
+                if(!LineIsFree(cell) && Globals.ThisAddIn.Application.Selection.Rows.Count == 1)
+                {
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
+                }
+                else
+                {
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = System.Drawing.Color.Black;
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Color = Color.White;
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Strikethrough = true;
+                }
+            }
+        }
+
         private void DoNotMigrateButton_Click(object sender, RibbonControlEventArgs e)
         {
             Excel.Worksheet displayWorksheet = Globals.ThisAddIn.Application.ActiveSheet;
 
             foreach (Excel.Range cell in Globals.ThisAddIn.Application.Selection.Rows)
             {
-                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
-
-                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = System.Drawing.Color.Black;
-                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Color = Color.White;
-                displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Strikethrough = true;
+                if (!LineIsFree(cell) && Globals.ThisAddIn.Application.Selection.Rows.Count == 1)
+                {
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Style = "Normal";
+                }
+                else
+                {
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Interior.Color = System.Drawing.Color.Gray;
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Color = Color.White;
+                    displayWorksheet.Range[$"{cell.Row}:{cell.Row}"].Font.Strikethrough = true;
+                }
             }
         }
 

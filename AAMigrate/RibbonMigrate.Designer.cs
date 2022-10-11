@@ -46,6 +46,7 @@
             this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
             this.SettingsButton = this.Factory.CreateRibbonButton();
+            this.DeletButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
             this.group1.SuspendLayout();
@@ -97,6 +98,7 @@
             // group1
             // 
             this.group1.Items.Add(this.TempMarkbutton);
+            this.group1.Items.Add(this.DeletButton);
             this.group1.Items.Add(this.DoNotMigrateButton);
             this.group1.Items.Add(this.ManualMigrationButton);
             this.group1.Items.Add(this.UnmarkRowButton);
@@ -154,6 +156,15 @@
             this.SettingsButton.ShowImage = true;
             this.SettingsButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.SettingsButton_Click);
             // 
+            // DeletButton
+            // 
+            this.DeletButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.DeletButton.Label = "Supprimé";
+            this.DeletButton.Name = "DeletButton";
+            this.DeletButton.OfficeImageId = "SparkLineNegativePointColorPicker";
+            this.DeletButton.ShowImage = true;
+            this.DeletButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DeletButton_Click);
+            // 
             // RibbonMigrate
             // 
             this.Name = "RibbonMigrate";
@@ -188,6 +199,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton ManualMigrationButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton TempMarkbutton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton SettingsButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton DeletButton;
     }
 
     partial class ThisRibbonCollection
