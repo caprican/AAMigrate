@@ -565,7 +565,7 @@ namespace AAMigrate
                 }
             }
 
-            MessageBox.Show("Transfert des colonnes en fonction des template terminé", "Transfert terminé", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //MessageBox.Show("Transfert des colonnes en fonction des template terminé", "Transfert terminé", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ExportsButton_Click(object sender, RibbonControlEventArgs e)
@@ -615,7 +615,7 @@ namespace AAMigrate
                 }
 
                 exportSheet.Range[$"B{row}:{GetExcelColumnName(exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Column)}{row}"].Value = string.Empty;
-                row = exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Row + 2;
+                row = exportSheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell).Row + 1;
             }
         }
 
