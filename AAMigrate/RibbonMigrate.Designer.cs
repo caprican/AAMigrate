@@ -41,12 +41,12 @@
             this.GenerateFileButton = this.Factory.CreateRibbonButton();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.TempMarkbutton = this.Factory.CreateRibbonButton();
+            this.DeletButton = this.Factory.CreateRibbonButton();
             this.DoNotMigrateButton = this.Factory.CreateRibbonButton();
             this.ManualMigrationButton = this.Factory.CreateRibbonButton();
             this.UnmarkRowButton = this.Factory.CreateRibbonButton();
             this.ClearStyleSheetButton = this.Factory.CreateRibbonButton();
             this.SettingsButton = this.Factory.CreateRibbonButton();
-            this.DeletButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.aaGroup.SuspendLayout();
             this.group1.SuspendLayout();
@@ -57,7 +57,7 @@
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.aaGroup);
             this.tab1.Groups.Add(this.group1);
-            this.tab1.Label = "Everdyn";
+            this.tab1.Label = "A² migrate";
             this.tab1.Name = "tab1";
             // 
             // aaGroup
@@ -115,6 +115,15 @@
             this.TempMarkbutton.ShowImage = true;
             this.TempMarkbutton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.TempMarkbutton_Click);
             // 
+            // DeletButton
+            // 
+            this.DeletButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.DeletButton.Label = "Supprimé";
+            this.DeletButton.Name = "DeletButton";
+            this.DeletButton.OfficeImageId = "SparkLineNegativePointColorPicker";
+            this.DeletButton.ShowImage = true;
+            this.DeletButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DeletButton_Click);
+            // 
             // DoNotMigrateButton
             // 
             this.DoNotMigrateButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -155,15 +164,6 @@
             this.SettingsButton.Name = "SettingsButton";
             this.SettingsButton.ShowImage = true;
             this.SettingsButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.SettingsButton_Click);
-            // 
-            // DeletButton
-            // 
-            this.DeletButton.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.DeletButton.Label = "Supprimé";
-            this.DeletButton.Name = "DeletButton";
-            this.DeletButton.OfficeImageId = "SparkLineNegativePointColorPicker";
-            this.DeletButton.ShowImage = true;
-            this.DeletButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.DeletButton_Click);
             // 
             // RibbonMigrate
             // 

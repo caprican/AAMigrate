@@ -30,16 +30,16 @@
     <DefineConstants>VSTO40</DefineConstants>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>C:\Users\capri\OneDrive\Bureau\AAMigrate\</PublishUrl>
     <InstallUrl />
     <TargetCulture>fr</TargetCulture>
-    <ApplicationVersion>1.0.0.29</ApplicationVersion>
+    <ApplicationVersion>1.0.1.1</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>days</UpdateIntervalUnits>
     <ProductName>AAMigrate</ProductName>
-    <PublisherName />
+    <PublisherName>A. MORELLET</PublisherName>
     <SupportUrl />
     <FriendlyName>AAMigrate</FriendlyName>
     <OfficeApplicationDescription />
@@ -270,14 +270,13 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>
-    </ManifestKeyFile>
+    <ManifestKeyFile>AAMigrate_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D48237F0C746B5004DB714652F1DB3438E7589E4</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E8E984A5893DA7084BFC4FBF4F1390C34E4770B7</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>AAMigrate_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
